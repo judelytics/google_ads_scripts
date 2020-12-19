@@ -1,0 +1,24 @@
+function main() {
+  var SPREADSHEET_URL = 'ENTER GOOGLE SHEET URL HERE';
+  var spreadsheet = SpreadsheetApp.openByUrl(SPREADSHEET_URL);
+  var sheet = spreadsheet.getSheetByName("Budget Changes");
+  var lastRow = sheet.getLastRow();
+ 
+
+  var header = sheet.getSheetValues(1, 1, 1, 2);
+  var range = sheet.getSheetValues(2, 1, 210, 2);
+  
+  
+  var i=0;
+  while(range[i]){
+  var campaignName=range[i][0];
+  var budget=range[i][1];
+  var campaign = AdsApp.campaigns().
+      withCondition('CampaignName = "' + campaignName + '"').
+      get().
+      next();
+  var caname = campaign.getName()
+ campaign.getBudget().setAmount(budget);
+  i++;
+  }
+}
