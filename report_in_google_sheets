@@ -1,0 +1,39 @@
+function main() {
+var SPREADSHEET_URL = "ENTER URL SHEET HERE";
+
+  var report = AdWordsApp.report(
+    'SELECT Month, CampaignName, Cost, Impressions, Clicks, Conversions, AdvertisingChannelType ' +
+    'FROM   CAMPAIGN_PERFORMANCE_REPORT ' +
+    'WHERE  Impressions > 0 ' +
+    'DURING THIS_MONTH');
+
+  var rows = report.rows();
+  
+  var spreadsheet = SpreadsheetApp.openByUrl(SPREADSHEET_URL);
+  var yesterdaySheet = spreadsheet.getSheetByName("To Date");
+  yesterdaySheet.getRange("A:G").clear();
+  yesterdaySheet.getRange("A1").setValue("Month");
+  yesterdaySheet.getRange("B1").setValue("Campaign Name");
+  yesterdaySheet.getRange("C1").setValue("Cost");
+  yesterdaySheet.getRange("D1").setValue("Impressions");
+  yesterdaySheet.getRange("E1").setValue("Clicks");
+  yesterdaySheet.getRange("F1").setValue("Conversions");
+  yesterdaySheet.getRange("G1").setValue("AdvertisingChannelType");  
+
+  
+  while (rows.hasNext()) {
+    var row = rows.next();
+     var month = row['Month'];
+          var format = 'mm-dd-yy';
+    var campaignName = row['CampaignName'];
+    var cost = row['Cost'];
+    var impressions = row['Impressions']; 
+     var clicks = row['Clicks']; 
+     var conversions = row['Conversions']; 
+     var AdvertisingChannelType = row['AdvertisingChannelType']; 
+
+
+    
+     yesterdaySheet.appendRow([month,campaignName, cost, impressions, clicks, conversions, AdvertisingChannelType]); 
+    }
+  }
